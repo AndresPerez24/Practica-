@@ -1,0 +1,37 @@
+.hero{
+	background: url("../../images/hero-image.png") no-repeat;
+	background-size: cover;
+	padding: 5em 0 25.8571em;
+	position: relative;
+	&__title{
+		color: $color-text-body;
+		float: right;
+		margin-right: 130px;
+		font-size: 50px;
+		width: 30%;
+	}
+	&__info{
+		background-color: rgba(0,0,0,0.5);
+		position: absolute;
+		bottom: 0;
+		right: 0;
+		left: 0;
+	}
+	&__info-item{
+		display: inline-block;
+		margin-right: 30px;
+	}
+	&__info-item--color{
+		color: red;
+	}
+	&__icon{
+		margin-right: 8px;
+		color: red;
+	}
+	&__votes--color{
+		color: white;
+	}
+	
+
+
+}

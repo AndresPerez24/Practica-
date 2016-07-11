@@ -38,10 +38,10 @@ $headings-font-weight:              400;
 $headings-line-height:              1.1;
 
 // Buttons
-$btn-font-family:                 inherit;
-$btn-font-weight:                 400;
-$button-border-width:             1px;
-$btn-border-radius:               4px;
+$btn-font-family:                 	inherit;
+$btn-font-weight:                 	400;
+$button-border-width:             	1px;
+$btn-border-radius:               	4px;
 
 // Components
 $padding-base-vertical:             6px;
@@ -91,7 +91,7 @@ $landscape:                         "only screen and (orientation: landscape)";
 $portrait:                          "only screen and (orientation: portrait)";
 
 
-$use-silent-classes:                true!default;
+$use-silent-classes:                false!default;
 $gutter:                            $base-spacing-unit!default;
 $push:                              false!default;
 $pull:                              false!default;

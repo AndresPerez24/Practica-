@@ -1,0 +1,30 @@
+.header{
+	&__main-icon{
+		margin-top: 20px;
+	}
+	&__user-info{
+		margin-top: 20px;
+		float: right;
+	}
+	&__user-info-name{
+		display: inline-block;
+		position: relative; 		
+  		left: 5px;
+  		color: $headings-color;
+	}
+	&__user-info-icon{
+	 	position: relative;
+		
+	  	left: 15px;
+	}
+}
+
+.main-nav{
+  margin-top: -14px;
+  text-align: center;
+    margin-left: 110px;
+	&__item{
+		display: inline-block;
+		margin-right: 30px;
+	}
+}
