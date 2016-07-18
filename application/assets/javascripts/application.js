@@ -15,6 +15,8 @@
     $movieVotes           = $('.js-movie-votes'),
     $movieTitle           = $('.js-movie-title'),
     $nowReleaseContainer  = $('.js-now-release-container'),
+    $favoritesContainer    =$('.js-favorites-container'),
+    
     // modal vars
     $modal                = $('.js-modal'),
     $modalClose           = $('.js-modal-close'),
@@ -22,7 +24,7 @@
     movieTrailerKey,
     similarMovies,
     $movieTitle           = $('.js-movie-title'),
-    $favoritesContainer   = $('.js-favorites-container')
+    $similarContainer     = $('.js-similar-container');
 
  
 
@@ -45,12 +47,12 @@
 
 
     $.each(movies, function( index, movie ){
-      if(index < 20) {
+      if(index < 10) {
          movie.$movieView = $(`<div class="grid__item small--one-half medium--one-third large--one-fifth">
                                 <div class="now-release__movie js-movie-container">              
                                     <a href="" class="js-open-modal">
                                      <img class="now-release__image " src="https://image.tmdb.org/t/p/w1920${movie.poster_path}" alt="">
-                                     <a href="#"><span class="icon-heart now-release__like"></span></a>
+                                     <a href="" "><span class="js-append-favorites icon-heart now-release__like"></span></a>
                                      <span class="now-release__votes ">${movie.vote_count}</span>
                                      <span class="icon-in now-release__download"></span>
                                      <h2 class="now-release__movie-title ">${movie.original_title}</h2>
@@ -58,7 +60,10 @@
                                 </div>
                               </div>`);
 
-        var $modalOpen = movie.$movieView.find('.js-open-modal');
+        movie.favorite = false;
+        var $modalOpen = movie.$movieView.find('.js-open-modal'),
+        $favoriteView;
+        var $appendFavoritesLink = movie.$movieView.find('.js-append-favorites');
 
         $modalOpen.click(function(event) {
           event.preventDefault();
@@ -90,8 +95,8 @@
                                                       </div>
                                                     </div>
                                                       `);
-              console.log(similarMovie);
-               $favoritesContainer.append(similarMovie.$similarMovieView);
+
+              $similarContainer.append(similarMovie.$similarMovieView);
               }
             });
 
@@ -109,6 +114,30 @@
         movie.closeModal = function(){
           $modal.removeClass('is-open');
         }
+
+        movie.appendFavorites = function(){    
+          $favoriteView = movie.$movieView.clone(true);   
+          $favoriteView.appendTo($favoritesContainer);  
+        }
+
+        movie.removeFavorites = function(){
+          $favoriteView.remove();
+        }
+
+        $appendFavoritesLink.click(function(event){
+          if (movie.favorite==false) {   
+          event.preventDefault();
+          $appendFavoritesLink.css('color', 'white');
+          movie.appendFavorites();
+          movie.favorite = true;
+          }  else if (movie.favorite==true) {
+            event.preventDefault();
+            $appendFavoritesLink.css('color', 'red');
+            movie.removeFavorites();
+            movie.favorite = false;
+          }
+        });
+
 
         $nowReleaseContainer.append(movie.$movieView);
       }
