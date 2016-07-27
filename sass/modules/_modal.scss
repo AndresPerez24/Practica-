@@ -56,6 +56,9 @@
 			opacity: 1;
 		}
 	}
+	&__image {
+		height: 222px;
+	}
 	&__movie-title{
 		@include font-size(15px);
 		bottom: 3px;

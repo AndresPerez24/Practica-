@@ -10,6 +10,33 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="icon" href="assets/images/favicon.png" />
     <link rel="stylesheet" href="assets/stylesheets/main.min.css" />
+    <!-- Movie Template -->
+
+    <script id="movie-template" type="text/x-handlebars-template">
+      <div class="grid__item small--one-half medium--one-third large--one-fifth">
+        <div class="now-release__movie js-movie-container">              
+          <a href="" class="js-open-modal">
+            <img class="now-release__image " src="https://image.tmdb.org/t/p/w1920{{poster_path}}" alt="">
+            <a href="" "><span class="js-append-favorites icon-heart now-release__like"></span></a>
+            <span class="now-release__votes ">{{vote_count}}</span>
+            <span class="icon-in now-release__download"></span>
+            <h2 class="now-release__movie-title ">{{original_title}}</h2>
+          </a> 
+        </div>
+      </div>
+    </script>
+
+    <!-- Similar Movie Template -->
+  
+    <script id="similar-movie-template" type="text/x-handlebars-template">
+      <div class="grid__item large--one-sixth">
+        <div class="content__movie">
+          <a href="#"><img src="https://image.tmdb.org/t/p/w1920{{poster_path}}" alt="" class="content__image full-width"></a>
+          <h3 class="content__movie-title">{{original_title}}</h3>
+        </div>
+      </div>
+    </script>
+
   </head>
   <body>
      <header class="header">
@@ -76,6 +103,8 @@
 
     <script src="assets/javascripts/vendor/vendor.min.js"></script>
     <script src="assets/javascripts/application.js"></script>
+    
+    
 
   </body>
 </html>

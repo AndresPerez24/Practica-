@@ -52,7 +52,7 @@ var options = {
   // ----- Concant ----- //
 
   vendors : {
-    files       : [ 'bower_components/jquery/dist/jquery.min.js' ],
+    files       : [ 'bower_components/jquery/dist/jquery.min.js', 'bower_components/handlebars/handlebars.min.js' ],
     destination : 'application/assets/javascripts/vendor',
     fileName: 'vendor.min.js'
   }

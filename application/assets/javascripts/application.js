@@ -1,36 +1,37 @@
 (function(){
     // Hero vars
-  var $heroImage          = $('.js-hero-image'),
-    $heroTitle            = $('.js-hero-title'),
-    $releaseDate          = $('.js-release-date'),
-    $runTime              = $('.js-runtime'),
-    $votes                = $('.js-votes'),
+  var $heroImage                   = $('.js-hero-image'),
+    $heroTitle                     = $('.js-hero-title'),
+    $releaseDate                   = $('.js-release-date'),
+    $runTime                       = $('.js-runtime'),
+    $votes                         = $('.js-votes'),
     mainTitle,
     urlImage,
     releaseDate,
     runTime,
     votes,
+    api_key                        = "api_key=3791872f32ee6ebb00015d00f51789d1",
     // movie vars
-    $movieImage           = $('.js-movie-image'),
-    $movieVotes           = $('.js-movie-votes'),
-    $movieTitle           = $('.js-movie-title'),
-    $nowReleaseContainer  = $('.js-now-release-container'),
-    $favoritesContainer    =$('.js-favorites-container'),
+    $movieImage                    = $('.js-movie-image'),
+    $movieVotes                    = $('.js-movie-votes'),
+    $movieTitle                    = $('.js-movie-title'),
+    $nowReleaseContainer           = $('.js-now-release-container'),
+    $favoritesContainer            = $('.js-favorites-container'),
     
     // modal vars
-    $modal                = $('.js-modal'),
-    $modalClose           = $('.js-modal-close'),
-    $movieTrailer         = $('.js-movie-trailer'),
+    $modal                         = $('.js-modal'),
+    $modalClose                    = $('.js-modal-close'),
+    $movieTrailer                  = $('.js-movie-trailer'),
     movieTrailerKey,
     similarMovies,
-    $movieTitle           = $('.js-movie-title'),
-    $similarContainer     = $('.js-similar-container');
+    $movieTitle                    = $('.js-movie-title'),
+    $similarContainer              = $('.js-similar-container'),
+    movieTemplateSource            = $("#movie-template").html(),
+    movieTemplate                  = Handlebars.compile(movieTemplateSource),
+    similarMovieTemplateSource     = $('#similar-movie-template').html(),
+    similarMovieTemplate           = Handlebars.compile(similarMovieTemplateSource);
 
- 
-
-
-
-  $.get( "http://api.themoviedb.org/3/movie/popular?api_key=3791872f32ee6ebb00015d00f51789d1" )
+  $.get( `http://api.themoviedb.org/3/movie/popular?${api_key}` )
     .then(changeMovies);
 
   function changeMovies(data){
@@ -44,108 +45,21 @@
     $votes.html(votes);
     $heroImage.css("background-image", `url('https://image.tmdb.org/t/p/w1920${urlImage}')`);
 
+    function openModal() {
+      $modal.addClass('is-open'); 
+    }
 
+    function closeModal(){
+      $modal.removeClass('is-open');
+    }
 
-    $.each(movies, function( index, movie ){
-      if(index < 10) {
-         movie.$movieView = $(`<div class="grid__item small--one-half medium--one-third large--one-fifth">
-                                <div class="now-release__movie js-movie-container">              
-                                    <a href="" class="js-open-modal">
-                                     <img class="now-release__image " src="https://image.tmdb.org/t/p/w1920${movie.poster_path}" alt="">
-                                     <a href="" "><span class="js-append-favorites icon-heart now-release__like"></span></a>
-                                     <span class="now-release__votes ">${movie.vote_count}</span>
-                                     <span class="icon-in now-release__download"></span>
-                                     <h2 class="now-release__movie-title ">${movie.original_title}</h2>
-                                    </a> 
-                                </div>
-                              </div>`);
-
-        movie.favorite = false;
-        var $modalOpen = movie.$movieView.find('.js-open-modal'),
-        $favoriteView;
-        var $appendFavoritesLink = movie.$movieView.find('.js-append-favorites');
-
-        $modalOpen.click(function(event) {
-          event.preventDefault();
-          movie.openModal();
-          $movieTitle.html(movie.original_title);
-          $.get( "http://api.themoviedb.org/3/movie/"+movie.id+"/videos?api_key=3791872f32ee6ebb00015d00f51789d1" )
-          .then(changeModal);
-
-          function changeModal(data){
-            var movieVideos     = data.results;
-            movieTrailerKey     = movieVideos[0].key;
-            $movieTrailer.html(`'<iframe width="854" height="480" src="https://www.youtube.com/embed/${movieTrailerKey}" frameborder="0" allowfullscreen></iframe>'`);
-            }
-
-            $.get( "http://api.themoviedb.org/3/movie/"+movie.id+"/similar?api_key=3791872f32ee6ebb00015d00f51789d1" )
-              .then(changeSimilarMovies);
-
-            function changeSimilarMovies(data){
-              similarMovies  = data.results;
-               
-            }
-
-            $.each(similarMovies, function(index, similarMovie ){
-              if(index < 10){              
-                similarMovie.$similarMovieView = $(`<div class="grid__item large--one-sixth">
-                                                    <div class="content__movie">
-                                                      <a href="#"><img src="https://image.tmdb.org/t/p/w1920${similarMovie.poster_path}" alt=""></a>
-                                                      <h3 class="content__movie-title">${similarMovie.original_title}</h3>
-                                                      </div>
-                                                    </div>
-                                                      `);
-
-              $similarContainer.append(similarMovie.$similarMovieView);
-              }
-            });
-
-        });
-
-        $modalClose.click(function(event){
-          event.preventDefault();
-          movie.closeModal();
-        });
-
-        movie.openModal = function(){
-          $modal.addClass('is-open');
-        }
-
-        movie.closeModal = function(){
-          $modal.removeClass('is-open');
-        }
-
-        movie.appendFavorites = function(){    
-          $favoriteView = movie.$movieView.clone(true);   
-          $favoriteView.appendTo($favoritesContainer);  
-        }
-
-        movie.removeFavorites = function(){
-          $favoriteView.remove();
-        }
-
-        $appendFavoritesLink.click(function(event){
-          if (movie.favorite==false) {   
-          event.preventDefault();
-          $appendFavoritesLink.css('color', 'white');
-          movie.appendFavorites();
-          movie.favorite = true;
-          }  else if (movie.favorite==true) {
-            event.preventDefault();
-            $appendFavoritesLink.css('color', 'red');
-            movie.removeFavorites();
-            movie.favorite = false;
-          }
-        });
-
-
-        $nowReleaseContainer.append(movie.$movieView);
-      }
+    $modalClose.click(function(event){
+      event.preventDefault();
+      closeModal();
     });
 
-
-    $.get( "http://api.themoviedb.org/3/movie/"+movies[0].id+"?api_key=3791872f32ee6ebb00015d00f51789d1" )
-      .then(changeRuntime);
+    $.get( `http://api.themoviedb.org/3/movie/${movies[0].id}${api_key}` )
+     .then(changeRuntime);
 
     function changeRuntime(data){
       var movies = data;
@@ -153,6 +67,64 @@
       $runTime.html(runTime+ "  MINS."); 
     }
 
+    function extendObject(movie) {
+
+      movie.$movieView = $(movieTemplate(movie));
+
+      movie.favorite = false;
+      var $modalOpen            = movie.$movieView.find('.js-open-modal'),
+          $appendFavoritesLink = movie.$movieView.find('.js-append-favorites'),
+          $favoriteView;
+
+      $modalOpen.click(function(event) {
+        $similarContainer.html('');
+        event.preventDefault();
+        $movieTitle.html(movie.original_title);
+        $.get( `http://api.themoviedb.org/3/movie/${movie.id}/videos?${api_key}` )
+         .then(changeModal);
+
+        function changeModal(data){
+          var movieVideos     = data.results;
+          movieTrailerKey     = movieVideos[0].key;
+          $movieTrailer.html(`<iframe width="854" height="480" src="https://www.youtube.com/embed/${movieTrailerKey}" frameborder="0" allowfullscreen></iframe>`);
+        }
+
+        $.get( `http://api.themoviedb.org/3/movie/${movie.id}/similar?${api_key}` )
+         .then(changeSimilarMovies);
+
+        function changeSimilarMovies(data){
+          similarMovies  = data.results;
+          var similiarMoviesAmount = 12;
+          $.each(similarMovies, function(index, similarMovie ){
+            if(index < similiarMoviesAmount){              
+              similarMovie.$similarMovieView = $(similarMovieTemplate(similarMovie));
+
+            $similarContainer.append(similarMovie.$similarMovieView);
+            }
+          });
+        }
+        openModal();
+      });
+
+      $appendFavoritesLink.click(function(event){
+        event.preventDefault();
+        if (movie.favorite == false) {   
+          $appendFavoritesLink.css('color', 'white');
+          $favoriteView = movie.$movieView.clone(true);   
+          $favoriteView.appendTo($favoritesContainer); 
+          movie.favorite = true;
+        } else if (movie.favorite == true) {
+          $appendFavoritesLink.css('color', 'red');
+          $favoriteView.remove();
+          movie.favorite = false;
+        }
+      });
+
+      $nowReleaseContainer.append(movie.$movieView);
+
+    }
+
+    movies.map(extendObject);
   }
 
 })();
